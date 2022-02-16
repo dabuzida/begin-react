@@ -2,7 +2,7 @@ import React from 'react';
 function Hello({ name, color }){
     return (
             <>
-            <div>안dd녕하세요</div>
+            <div>안녕하세요</div>
             <div style={{ color }}>굿바이 {name}</div>
             </>
     )

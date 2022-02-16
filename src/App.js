@@ -2,6 +2,8 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import Hello from './Hello';
+import Wrapper from './Wrapper';
+
 
 function App() {
   const name = 'react';
@@ -13,12 +15,17 @@ function App() {
   }
   return (
     <>
-        <Hello name="react" color="red" />
-        <Hello color="pink" />
-        <div style={style}>{name}</div>
-        <div className="gray-box"></div>
+        <Wrapper />
+          <Hello name="react" color="red" />
+          <Hello color="pink" />
+        {/* </Wrapper> */}
     </>
-  )
+    
+    //     
+    //     
+    //     <div style={style}>{name}</div>
+    //     <div className="gray-box"></div>
+  );
   // return (
   //   <div className="App">
   //     <header className="App-header">
