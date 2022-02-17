@@ -1,31 +1,87 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import Hello from './Hello';
 import Wrapper from './Wrapper';
+import Counter from './Counter';
+import InputSample from './InputSample';
+import UserList from './UserList';
+import CreateUser from './CreateUser';
 
 
 function App() {
-  const name = 'react';
-  const style = {
-    backgroundColor: 'black',
-    color: 'aqua',
-    fontSize: 24, // 기본 단위 px
-    padding: '1rem' // 다른 단위 사용 시 문자열로 설정
+  const [users, setUsers] = useState([
+    {
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com'
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com'
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com'
+    }
+  ]);
+
+  const [inputs, setInputs] = useState({
+      username: '',
+      email: '',
+  });
+  const { username, email } = inputs;
+  const focusUsername = useRef();
+  const nextId = useRef(4);
+  
+  const onChange = e => {
+    const { name, value } = e.target;
+    setInputs({...inputs, [name]: value});
+  };
+  const onRemove = id => {
+    setUsers(users.filter(user => user.id !== id));
+  };
+  const onCreate = () => {
+    const user = {
+      id: nextId.current,
+      username,
+      email
+    };
+    // setUsers([...users, user]);
+    setUsers(users.concat(user));
+
+    setInputs({
+      username: '',
+      email: ''
+    });
+    focusUsername.current.focus();
+    nextId.current += 1;
   }
-  return (
-    <>
-        <Wrapper />
-          <Hello name="react" color="red" />
-          <Hello color="pink" />
-        {/* </Wrapper> */}
-    </>
-    
+    return (
+      <>
+        <CreateUser 
+          username={username}
+          email={email}
+          onChange={onChange}
+          onCreate={onCreate}
+          useRef={focusUsername}
+        />
+        <UserList users={users} onRemove={onRemove}/>
+      </>
+      // <UserList />
+      // <InputSample />
+      // <Counter />
+      // <Wrapper >
+      //     <Hello name="react" color="red" isSpecial={true} />
+      //     <Hello color="pink" isSpecial/>
+      //   </Wrapper>
     //     
     //     
     //     <div style={style}>{name}</div>
     //     <div className="gray-box"></div>
-  );
+    );
   // return (
   //   <div className="App">
   //     <header className="App-header">
