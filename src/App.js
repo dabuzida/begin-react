@@ -1,30 +1,32 @@
 import React, { useState, useRef } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import Hello from './Hello';
-import Wrapper from './Wrapper';
-import Counter from './Counter';
-import InputSample from './InputSample';
+// import Hello from './Hello';
+// import Wrapper from './Wrapper';
+// import Counter from './Counter';
+// import InputSample from './InputSample';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
-
 
 function App() {
   const [users, setUsers] = useState([
     {
       id: 1,
       username: 'velopert',
-      email: 'public.velopert@gmail.com'
+      email: 'public.velopert@gmail.com',
+      active: true,
     },
     {
       id: 2,
       username: 'tester',
-      email: 'tester@example.com'
+      email: 'tester@example.com',
+      active: false,
     },
     {
       id: 3,
       username: 'liz',
-      email: 'liz@example.com'
+      email: 'liz@example.com',
+      active: false,
     }
   ]);
 
@@ -43,11 +45,18 @@ function App() {
   const onRemove = id => {
     setUsers(users.filter(user => user.id !== id));
   };
+  const onToggle = id =>{
+    setUsers(
+      users.map(
+        user => user.id === id ? { ...user, active: !user.active }: user
+        ));
+  }
   const onCreate = () => {
     const user = {
       id: nextId.current,
       username,
-      email
+      email,
+      active: false,
     };
     // setUsers([...users, user]);
     setUsers(users.concat(user));
@@ -68,7 +77,7 @@ function App() {
           onCreate={onCreate}
           useRef={focusUsername}
         />
-        <UserList users={users} onRemove={onRemove}/>
+        <UserList users={users} onRemove={onRemove} onToggle={onToggle}/>
       </>
       // <UserList />
       // <InputSample />
