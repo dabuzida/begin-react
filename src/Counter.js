@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 function Counter(){
+  console.log('Counter')
+
     const [number, setNumber] = useState(0);
     const onIncrease = () => {
         setNumber(prevNumber => prevNumber + 1);
