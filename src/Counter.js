@@ -1,7 +1,27 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
+
+// function reducer(state, action){
+//     console.log('run reducer function')
+//     switch(action.type){
+//         case 'INCREMENT':
+//             return state + 1;
+//         case 'DECREMENT':
+//             return state - 1;
+//         default:
+//             return state;
+//     }
+// }
+
 
 function Counter(){
-  console.log('Counter')
+    console.log('Counter component rendering');
+    // const [number, dispatch] = useReducer(reducer, 0);
+    // const onIncrease = () => {
+    //     dispatch({ type: 'INCREMENT' });
+    // };
+    // const onDecrease = () => {
+    //     dispatch({ type: 'DECREMENT' });
+    // };
 
     const [number, setNumber] = useState(0);
     const onIncrease = () => {

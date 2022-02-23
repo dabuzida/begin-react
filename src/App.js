@@ -1,10 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback } from 'react';
-// import logo from './logo.svg';
-import './App.css';
-// import Hello from './Hello';
-// import Wrapper from './Wrapper';
-import Counter from './Counter';
-// import InputSample from './InputSample';
+import React, { useState, useReducer, useRef, useMemo, useCallback } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 
@@ -13,112 +7,139 @@ function countActiveUsers(users){
   return users.filter(user => user.active).length;
 }
 
-function App() {
-  console.log('App component rendering')
-  const [users, setUsers] = useState(
-    [
-      {
-        id: 1,
-        username: 'velopert',
-        email: 'public.velopert@gmail.com',
-        active: true,
-      },
-      {
-        id: 2,
-        username: 'tester',
-        email: 'tester@example.com',
-        active: false,
-      },
-      {
-        id: 3,
-        username: 'liz',
-        email: 'liz@example.com',
-        active: false,
-      }
-    ]
-  );
-
-  const [inputs, setInputs] = useState(
+const initialState = {
+  // 1
+//   create input을 건드리는데 userlist  불필요한 렌더링
+// 왜냐하면 useReducer 쓰느라 inputs, users를 하나의 state로 묶어서 
+// inputs가 바뀌니깐 React.memo를 써도 바낀걸로 인식하는듯
+//  하나로 묶였는데도 다르게 적용되는지 위에 세개의 줄 적용 안하네?
+  inputs: {
+    username: '',
+    email: ''
+  },
+  users: [
     {
-      username: '',
-      email: '',
+      id: 1,
+      username: 'velopert',
+      email: 'public.velopert@gmail.com',
+      active: true
+    },
+    {
+      id: 2,
+      username: 'tester',
+      email: 'tester@example.com',
+      active: false
+    },
+    {
+      id: 3,
+      username: 'liz',
+      email: 'liz@example.com',
+      active: false
     }
-  );
-  const { username, email } = inputs;
-  const focusUsername = useRef();
-  const nextId = useRef(4);
-  
-  const onChange = useCallback(
-    e => {
+  ]
+};
+
+function reducer(state, action){
+  switch (action.type){
+    case 'CHANGE_INPUT':
+      return { 
+        ...state, 
+        inputs: {...state.inputs, [action.name]: action.value } 
+      };
+    case 'CREATE_USER':
+      return { 
+        inputs: initialState.inputs, 
+        users: state.users.concat(action.user) 
+      };
+    case 'REMOVE_USER':
+      return {
+        ...state,
+        users: state.users.filter(user => user.id !== action.id),
+      };
+    case 'TOGGLE_USER':
+      return {
+        ...state,
+        users: state.users.map(user => 
+          user.id === action.id ? { ...user, active: !user.active } : user),
+      };
+    default: 
+      return state;
+  }
+}
+
+function App() {
+    console.log('App component rendering');
+    const focusUsername = useRef();
+    const nextId = useRef(4);
+    const [state, dispatch] = useReducer(reducer, initialState);
+    // 2
+    // initialState 값이  state로 들어갈때 복사해서 넣는건지 => 이게되야 말이돼
+    // 아니면 같은 객체가되는건지
+    //  creat_user에서
+    const { users } = state;
+    const { username, email } = state.inputs;
+    const onChange = useCallback(e => {
       const { name, value } = e.target;
-      setInputs({...inputs, [name]: value});
-    },
-    [inputs]
-  );
-
-  const onRemove = useCallback(
-    id => {
-      setUsers(users.filter(user => user.id !== id));
-    },
-    [users]
-  );
-  const onToggle = useCallback(
-    id => {
-      setUsers(
-        users.map(
-          user => user.id === id ? { ...user, active: !user.active } : user
-      ));
-    },
-    [users]
-  );
-  const onCreate = useCallback(() => {
-    const user = {
-      id: nextId.current,
-      username,
-      email,
-      active: false,
-    };
-    // setUsers([...users, user]);
-    setUsers(users.concat(user));
-
-    setInputs({
-      username: '',
-      email: ''
-    });
-    focusUsername.current.focus();
-    nextId.current += 1;
-    }, 
-    [users, username, email]
-  );
-  const count = useMemo(() => countActiveUsers(users), [users]) ;
+      dispatch({ type: 'CHANGE_INPUT', name, value });
+      },
+      []
+    );
+    const onCreate = useCallback(() => {
+        const user = {
+          id: nextId.current,
+          username,
+          email,
+          active: false,
+        };
+        dispatch({ type: 'CREATE_USER', user });
+        focusUsername.current.focus();
+        nextId.current += 1;
+      },
+      [username, email]
+    );
+    const onRemove = useCallback(id => {
+        dispatch({ type: 'REMOVE_USER', id })
+      },
+      []
+    );
+    const onToggle = useCallback(id => {
+        dispatch({ type: 'TOGGLE_USER', id })
+      },
+      []
+    );
+    const count = useMemo(() => countActiveUsers(users), [users]) ;
     return (
       <>
         <CreateUser 
-          username={username}
+          username={username} 
           email={email}
           onChange={onChange}
           onCreate={onCreate}
           useRef={focusUsername}
         />
-        <UserList users={users} onRemove={onRemove} onToggle={onToggle}/>
+        <UserList 
+          users={users} 
+          onToggle={onToggle}
+          onRemove={onRemove}
+        />
         <div>활성사용자 수 : {count}</div>
       </>
     );
 }
 
 
-/* function App() {
-  console.log('App')
-  const [parts, setParts] = useState('');
+// function App() {
+//   console.log('App rendering')
+//   const [parts, setParts] = useState('');
 
-  return (
-    <>
-      <Counter />
-      <div>{parts}</div>
-      <button onClick={() => setParts(e => e+'d')}>버튼</button>
-    </>
-  )
-} */
+//   return (
+//     <>
+//       <Counter />
+//       {/* <div>{parts}</div>
+//       <button onClick={() => setParts(e => e+'d')}>버튼</button> */}
+//     </>
+//   )
+// }
 
       // <UserList />
       // <InputSample />
