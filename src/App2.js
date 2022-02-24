@@ -11,13 +11,16 @@ import Counter from './Counter';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 
+
+console.log('#################### App.js ####################');
+
 function countActiveUsers(users){
   console.log('활성 사용자 수를 세는중...');
   return users.filter(user => user.active).length;
 }
 
 function App() {
-  console.log('App component rendering')
+  console.log('++++++++++++++++++++ App function rendering ++++++++++++++++++++')
   const [users, setUsers] = useState(
     [
       {

@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from 'react';
+console.log('#################### Counter.js ####################');
 
 // function reducer(state, action){
 //     console.log('run reducer function')
@@ -14,7 +15,7 @@ import React, { useReducer, useState } from 'react';
 
 
 function Counter(){
-    console.log('Counter component rendering');
+    console.log('++++++++++++++++++++ Counter function rendering ++++++++++++++++++++');
     // const [number, dispatch] = useReducer(reducer, 0);
     // const onIncrease = () => {
     //     dispatch({ type: 'INCREMENT' });

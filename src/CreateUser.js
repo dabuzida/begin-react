@@ -1,7 +1,7 @@
 import React from 'react';
-
+console.log('#################### CreateUser.js ####################');
 function CreateUser({ username, email, onChange, onCreate, useRef }){
-    console.log('CreateUser component rendering');
+    console.log('++++++++++++++++++++ CreateUser function rendering ++++++++++++++++++++');
     return (
         <div>
             <b>==============================</b>

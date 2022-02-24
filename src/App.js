@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useRef, useMemo, useCallback } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
+console.log('#################### App.js ####################');
 
 function countActiveUsers(users){
   console.log('활성 사용자 수를 세는중...');
@@ -8,11 +9,6 @@ function countActiveUsers(users){
 }
 
 const initialState = {
-  // 1
-//   create input을 건드리는데 userlist  불필요한 렌더링
-// 왜냐하면 useReducer 쓰느라 inputs, users를 하나의 state로 묶어서 
-// inputs가 바뀌니깐 React.memo를 써도 바낀걸로 인식하는듯
-//  하나로 묶였는데도 다르게 적용되는지 위에 세개의 줄 적용 안하네?
   inputs: {
     username: '',
     email: ''
@@ -68,7 +64,8 @@ function reducer(state, action){
 }
 
 function App() {
-    console.log('App component rendering');
+    console.log('++++++++++++++++++++ App function rendering ++++++++++++++++++++');
+    console.log(initialState);
     const focusUsername = useRef();
     const nextId = useRef(4);
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -108,6 +105,7 @@ function App() {
       []
     );
     const count = useMemo(() => countActiveUsers(users), [users]) ;
+
     return (
       <>
         <CreateUser 

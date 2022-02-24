@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-
+console.log('#################### UserList.js ####################');
 // const User = React.memo(function User({ user, onRemove, onToggle }){
 function User({ user, onRemove, onToggle }){
-    console.log('User component rendering');
+    console.log('++++++++++++++++++++ User function rendering ++++++++++++++++++++');
 
     /* useEffect(() => {
         console.log('user 값이 설정됨');
@@ -34,7 +34,7 @@ function User({ user, onRemove, onToggle }){
 // );
 
 function UserList({ users, onRemove, onToggle }){
-    console.log('UserList component rendering');
+    console.log('++++++++++++++++++++ UserList function rendering ++++++++++++++++++++');
     return (
         <div>
             {users.map((user) => (
