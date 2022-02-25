@@ -1,6 +1,7 @@
 import React, { useState, useReducer, useRef, useMemo, useCallback } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
+import useInputs from './hooks/useInputs';
 console.log('#################### App.js ####################');
 
 function countActiveUsers(users){
@@ -9,10 +10,10 @@ function countActiveUsers(users){
 }
 
 const initialState = {
-  inputs: {
-    username: '',
-    email: ''
-  },
+  // inputs: {
+  //   username: '',
+  //   email: ''
+  // },
   users: [
     {
       id: 1,
@@ -65,22 +66,23 @@ function reducer(state, action){
 
 function App() {
     console.log('++++++++++++++++++++ App function rendering ++++++++++++++++++++');
-    console.log(initialState);
+    
+    const [{ username, email }, onChange, reset] = useInputs({
+      username: '',
+      email: ''
+    });
+    
     const focusUsername = useRef();
     const nextId = useRef(4);
     const [state, dispatch] = useReducer(reducer, initialState);
-    // 2
-    // initialState 값이  state로 들어갈때 복사해서 넣는건지 => 이게되야 말이돼
-    // 아니면 같은 객체가되는건지
-    //  creat_user에서
     const { users } = state;
-    const { username, email } = state.inputs;
-    const onChange = useCallback(e => {
+    // const { username, email } = state.inputs;
+    /* const onChange = useCallback(e => {
       const { name, value } = e.target;
       dispatch({ type: 'CHANGE_INPUT', name, value });
       },
       []
-    );
+    ); */
     const onCreate = useCallback(() => {
         const user = {
           id: nextId.current,
@@ -89,18 +91,19 @@ function App() {
           active: false,
         };
         dispatch({ type: 'CREATE_USER', user });
+        reset();
         focusUsername.current.focus();
         nextId.current += 1;
       },
-      [username, email]
+      [username, email, reset]
     );
     const onRemove = useCallback(id => {
-        dispatch({ type: 'REMOVE_USER', id })
+        dispatch({ type: 'REMOVE_USER', id });
       },
       []
     );
     const onToggle = useCallback(id => {
-        dispatch({ type: 'TOGGLE_USER', id })
+        dispatch({ type: 'TOGGLE_USER', id });
       },
       []
     );
