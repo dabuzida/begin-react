@@ -1,7 +1,8 @@
 import React, { useState, useReducer, useRef, useMemo, useCallback } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
-import useInputs from './hooks/useInputs';
+// import useInputs from './hooks/useInputs';
+
 console.log('#################### App.js ####################');
 
 function countActiveUsers(users){
@@ -64,16 +65,19 @@ function reducer(state, action){
   }
 }
 
+// export const UserDispatch = React.createContext(null);
+export const UserDispatch = React.createContext(null);
+
 function App() {
     console.log('++++++++++++++++++++ App function rendering ++++++++++++++++++++');
     
-    const [{ username, email }, onChange, reset] = useInputs({
-      username: '',
-      email: ''
-    });
+    // const [{ username, email }, onChange, reset] = useInputs({
+    //   username: '',
+    //   email: ''
+    // });
     
     const focusUsername = useRef();
-    const nextId = useRef(4);
+    // const nextId = useRef(4);
     const [state, dispatch] = useReducer(reducer, initialState);
     const { users } = state;
     // const { username, email } = state.inputs;
@@ -83,6 +87,7 @@ function App() {
       },
       []
     ); */
+/* 
     const onCreate = useCallback(() => {
         const user = {
           id: nextId.current,
@@ -96,35 +101,32 @@ function App() {
         nextId.current += 1;
       },
       [username, email, reset]
-    );
-    const onRemove = useCallback(id => {
-        dispatch({ type: 'REMOVE_USER', id });
-      },
-      []
-    );
-    const onToggle = useCallback(id => {
-        dispatch({ type: 'TOGGLE_USER', id });
-      },
-      []
-    );
+    ); */
+    // const onRemove = useCallback(id => {
+    //     dispatch({ type: 'REMOVE_USER', id });
+    //   },
+    //   []
+    // );
+    // const onToggle = useCallback(id => {
+    //     dispatch({ type: 'TOGGLE_USER', id });
+    //   },
+    //   []
+    // );
     const count = useMemo(() => countActiveUsers(users), [users]) ;
-
     return (
-      <>
+      <UserDispatch.Provider value={dispatch} >
         <CreateUser 
-          username={username} 
-          email={email}
-          onChange={onChange}
-          onCreate={onCreate}
-          useRef={focusUsername}
+          // username={username} 
+          // email={email}
+          // onChange={onChange}
+          // onCreate={onCreate}
+          // useRef={focusUsername}
         />
         <UserList 
           users={users} 
-          onToggle={onToggle}
-          onRemove={onRemove}
         />
         <div>활성사용자 수 : {count}</div>
-      </>
+      </UserDispatch.Provider>
     );
 }
 
