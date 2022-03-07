@@ -4,7 +4,7 @@ import CreateUser from './CreateUser';
 import useMyReducer from './hooks/useMyReducer';
 console.log('#################### App.js ####################');
 
-function countActiveUsers(users){
+function countActiveUsers(users) {
   console.log('활성 사용자 수를 세는중...');
   return users.filter(user => user.active).length;
 }
@@ -24,7 +24,7 @@ const initialState = {
     {
       id: 2,
       username: 'tester',
-      email: 'tester@example.com',
+      email: "tester@example.com",
       active: false
     },
     {
@@ -37,31 +37,31 @@ const initialState = {
 };
 
 function App() {
-    console.log('++++++++++++++++++++ App function rendering ++++++++++++++++++++');
-    const [state, onChange, onCreate, onToggle, 
-      onRemove, focusUsername] = useMyReducer(initialState);
-    const { users } = state;
-    const { username, email } = state.inputs;
-    const count = useMemo(() => 
-            countActiveUsers(users), [users]) ;
+  console.log('++++++++++++++++++++ App function rendering ++++++++++++++++++++');
+  const [state, onChange, onCreate, onToggle,
+    onRemove, focusUsername] = useMyReducer(initialState);
+  const { users } = state;
+  const { username, email } = state.inputs;
+  const count = useMemo(() =>
+    countActiveUsers(users), [users]);
 
-    return (
-      <>
-        <CreateUser 
-          username={username} 
-          email={email}
-          onChange={onChange}
-          onCreate={onCreate}
-          useRef={focusUsername}
-        />
-        <UserList 
-          users={users} 
-          onToggle={onToggle}
-          onRemove={onRemove}
-        />
-        <div>활성사용자 수 : {count}</div>
-      </>
-    );
+  return (
+    <>
+      <CreateUser
+        username={username}
+        email={email}
+        onChange={onChange}
+        onCreate={onCreate}
+        useRef={focusUsername}
+      />
+      <UserList
+        users={users}
+        onToggle={onToggle}
+        onRemove={onRemove}
+      />
+      <div>활성사용자 수 : {count}</div>
+    </>
+  );
 }
 
 export default App;

@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './App7';
+// App7: styled-components
 // import Counter from './Counter';
+
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
